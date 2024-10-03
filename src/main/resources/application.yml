@@ -2,17 +2,16 @@ spring:
   application:
     name: t1-java-demo
   datasource:
-    jdbcUrl: jdbc:postgresql://localhost:5432/t1_demo
+    jdbcUrl: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: "0000"
     driverClassName: org.postgresql.Driver
   liquibase:
     enabled: true
-    default-schema: t1_demo
+    default-schema: public
     change-log: db/changelog/db.changelog-master.xml
     driver-class-name: org.postgresql.Driver
-    driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/t1_demo
+    url: jdbc:postgresql://localhost:5432/postgres
     user: postgres
     password: "0000"
 security:
@@ -39,6 +38,8 @@ t1:
       client_registration: t1_demo_client_registration
       client_id_registered: t1_demo_client_registered
       client_transactions: t1_demo_client_transactions
+      demo_transactions: t1_demo_transactions
+      demo_accounts: t1_demo_accounts
 
     listener:
       poll-timeout: 1000

@@ -36,5 +36,4 @@ public class MessageDeserializer<T> extends JsonDeserializer<T> {
             return null;
         }
     }
-
 }

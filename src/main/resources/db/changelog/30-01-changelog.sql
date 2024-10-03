@@ -60,3 +60,37 @@ ALTER TABLE user_roles
 ALTER TABLE user_roles
     ADD CONSTRAINT fk_userol_on_user FOREIGN KEY (user_id) REFERENCES users (id);
 
+-- changeset e_cha:1727702549313-12
+CREATE SEQUENCE client_seq
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    MAXVALUE 9223372036854775807
+    CACHE 1
+    NO CYCLE;
+
+-- changeset e_cha:1727702549313-13
+CREATE TABLE client (
+    id BIGINT NOT NULL,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255),
+    middle_name VARCHAR(255),
+    PRIMARY KEY (id)
+);
+
+
+-- changeset e_cha:1727702549313-14
+CREATE TABLE account
+(
+    id          BIGINT NOT NULL,
+    client_id   BIGINT NOT NULL,
+    type        VARCHAR(20) NOT NULL,
+    balance     DECIMAL(19, 2) NOT NULL,
+    CONSTRAINT pk_account PRIMARY KEY (id),
+    CONSTRAINT fk_account_on_client FOREIGN KEY (client_id) REFERENCES client (id)
+);
+
+-- changeset e_cha:1727702549313-15
+ALTER TABLE transaction
+    ADD COLUMN account_id BIGINT,
+    ADD CONSTRAINT fk_transaction_on_account FOREIGN KEY (account_id) REFERENCES account (id);
