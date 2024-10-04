@@ -63,7 +63,7 @@ ALTER TABLE user_roles
 -- changeset e_cha:1727702549313-12
 CREATE SEQUENCE client_seq
     START WITH 1
-    INCREMENT BY 1
+    INCREMENT BY 50
     MINVALUE 1
     MAXVALUE 9223372036854775807
     CACHE 1
@@ -80,17 +80,17 @@ CREATE TABLE client (
 
 
 -- changeset e_cha:1727702549313-14
-CREATE TABLE account
+CREATE TABLE IF NOT EXISTS account
 (
     id          BIGINT NOT NULL,
     client_id   BIGINT NOT NULL,
     type        VARCHAR(20) NOT NULL,
     balance     DECIMAL(19, 2) NOT NULL,
-    CONSTRAINT pk_account PRIMARY KEY (id),
-    CONSTRAINT fk_account_on_client FOREIGN KEY (client_id) REFERENCES client (id)
+    CONSTRAINT pk_account PRIMARY KEY (id)
 );
 
 -- changeset e_cha:1727702549313-15
 ALTER TABLE transaction
-    ADD COLUMN account_id BIGINT,
-    ADD CONSTRAINT fk_transaction_on_account FOREIGN KEY (account_id) REFERENCES account (id);
+    ADD COLUMN account_id BIGINT;
+-- changeset e_cha:1727702549313-16
+CREATE SEQUENCE IF NOT EXISTS account_seq START WITH 1 INCREMENT BY 50;

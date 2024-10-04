@@ -40,6 +40,9 @@ t1:
       client_transactions: t1_demo_client_transactions
       demo_transactions: t1_demo_transactions
       demo_accounts: t1_demo_accounts
-
+      demo_metric: t1_demo_metric_trace
+      demo_error: t1_demo_error_trace
     listener:
       poll-timeout: 1000
+  metric:
+    ms: 1

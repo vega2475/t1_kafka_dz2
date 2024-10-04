@@ -17,7 +17,6 @@ import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.FixedBackOff;
 import ru.t1.java.demo.kafka.KafkaClientProducer;
 import ru.t1.java.demo.kafka.MessageDeserializer;
@@ -101,6 +100,7 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, AccountDto> accountKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, AccountDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(accountConsumerFactory());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
@@ -110,6 +110,7 @@ public class KafkaConfig {
             ConsumerFactory<String, TransactionDto> transactionConsumerFactory) {
         ConcurrentKafkaListenerContainerFactory<String, TransactionDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(transactionConsumerFactory);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
         return factory;
     }
 
@@ -168,5 +169,16 @@ public class KafkaConfig {
         props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, false);
         return new DefaultKafkaProducerFactory<>(props);
     }
-
+    //Для метрик и исключений
+    @Bean("defaultStringKafkaTemplate")
+    @ConditionalOnProperty(value = "t1.kafka.producer.enable",
+            havingValue = "true",
+            matchIfMissing = true)
+    public KafkaTemplate<String, String> defaultStringKafkaTemplate() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, servers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        return new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(props));
+    }
 }

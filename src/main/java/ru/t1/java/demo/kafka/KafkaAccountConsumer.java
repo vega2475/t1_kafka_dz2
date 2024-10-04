@@ -6,6 +6,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
+import ru.t1.java.demo.aop.Metric;
 import ru.t1.java.demo.model.Account;
 import ru.t1.java.demo.model.dto.AccountDto;
 import ru.t1.java.demo.service.AccountService;
@@ -17,9 +18,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class KafkaAccountConsumer {
-    //TODO - сделать так что бы этот лисенер был виден (проблемы с десириализацией (в логах))
     private final AccountService accountService;
-
+    @Metric
     @KafkaListener(id = "accountConsumerListener",
                    topics = "${t1.kafka.topic.demo_accounts}",
                    containerFactory = "accountKafkaListenerContainerFactory")
